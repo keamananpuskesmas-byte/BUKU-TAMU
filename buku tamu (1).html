@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buku Tamu Security Puskesmas</title>
+
+<style>
+body{
+  font-family:Arial;
+  background:#f4f6f9;
+  margin:0;
+  min-height:100vh;
+}
+.header{
+  background:#28a745;
+  color:white;
+  padding:15px;
+  text-align:center;
+}
+.container{
+  padding:20px;
+}
+.card{
+  background:white;
+  padding:20px;
+  border-radius:10px;
+  margin-bottom:20px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+input,button{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  border-radius:5px;
+  border:1px solid #ccc;
+}
+button{
+  background:#28a745;
+  color:white;
+  border:none;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<h2>Buku Tamu Security Puskesmas</h2>
+</div>
+
+<div class="container">
+<div class="card">
+<h3>Form Buku Tamu</h3>
+
+<input type="text" id="nama" placeholder="Nama">
+<input type="text" id="hp" placeholder="No HP">
+<input type="text" id="instansi" placeholder="Instansi">
+<input type="text" id="keperluan" placeholder="Keperluan">
+
+<button onclick="kirimData()">Kirim ke Google Sheet</button>
+</div>
+</div>
+
+<script>
+const scriptURL = "https://script.google.com/macros/s/AKfycbyBcQvRYxobc2x0qPPyVCW-I2P4X_ln2fPWVH9D0h774gwbJLbIAKBqP0jRwDo8NMtu/exec";
+
+function kirimData(){
+
+let nama = document.getElementById("nama").value;
+let hp = document.getElementById("hp").value;
+let instansi = document.getElementById("instansi").value;
+let keperluan = document.getElementById("keperluan").value;
+
+if(!nama || !hp || !instansi || !keperluan){
+    alert("Semua field wajib diisi!");
+    return;
+}
+
+let form = document.createElement("form");
+form.method = "POST";
+form.action = scriptURL;
+form.target = "hidden_iframe";
+
+function tambahInput(name, value){
+    let input = document.createElement("input");
+    input.type = "hidden";
+    input.name = name;
+    input.value = value;
+    form.appendChild(input);
+}
+
+tambahInput("nama", nama);
+tambahInput("hp", hp);
+tambahInput("instansi", instansi);
+tambahInput("keperluan", keperluan);
+
+document.body.appendChild(form);
+form.submit();
+document.body.removeChild(form);
+
+alert("Data berhasil dikirim!");
+
+document.getElementById("nama").value = "";
+document.getElementById("hp").value = "";
+document.getElementById("instansi").value = "";
+document.getElementById("keperluan").value = "";
+}
+</script>
+
+<iframe name="hidden_iframe" style="display:none;"></iframe>
